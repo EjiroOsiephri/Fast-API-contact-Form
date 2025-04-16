@@ -12,7 +12,7 @@ def send_email(data):
     }
 
     payload = {
-        "from": "Contact Form <onboarding@resend.dev>",  # You can verify your own domain sender
+        "from": "Contact Form <onboarding@resend.dev>",  
         "to": [os.getenv("RECEIVER_EMAIL")],
         "subject": "New Contact Form Submission",
         "html": f"""

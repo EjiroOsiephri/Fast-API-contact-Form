@@ -2,17 +2,15 @@ from fastapi import FastAPI, Depends
 from sqlalchemy.orm import Session
 from .database import SessionLocal, engine, Base
 from . import models, schemas, email_utils, sms_utils
+from .routes import router
+from .dependencies import get_db
 
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
+app.include_router(router)
+
 
 @app.post("/contact")
 def create_contact(contact: schemas.ContactCreate, db: Session = Depends(get_db)):
@@ -26,3 +24,5 @@ def create_contact(contact: schemas.ContactCreate, db: Session = Depends(get_db)
     sms_utils.send_sms(contact)
 
     return {"message": "Contact data received and forwarded!"}
+
+
